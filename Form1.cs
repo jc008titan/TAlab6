@@ -33,15 +33,17 @@ namespace Farmacie
                 selectat = 1;
             reteta = (Farmacie.Medicament.Reteta)selectat;
 
-            string varste= " Adulti";
+            string varste= "";
             if (checkBox1.Checked)
                 varste += " Copii0_3";
             if (checkBox2.Checked)
-                varste += " Copii3_9";
+                varste += " Copii4_9";
             if (checkBox3.Checked)
-                varste += " Copii9_18";
+                varste += " Copii10_17";
             if (checkBox4.Checked)
                 varste += " Adulti";
+            if (checkBox5.Checked)
+                varste += " Batrani";
             string[] grupevarsta = varste.Split();
             Medicament.Varsta varsta = 0;
             Medicament.Varsta varstacitita;
@@ -106,6 +108,7 @@ namespace Farmacie
         private void button1_Click(object sender, EventArgs e)
         {
             CitireMedicament();
+            this.Width=1300;
         }
 
         private void button4_Click(object sender, EventArgs e)
