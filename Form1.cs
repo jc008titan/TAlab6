@@ -92,9 +92,9 @@ namespace Farmacie
             Medicament.Reteta reteta = 0;
             int selectat = 1;
             if (radioButton1.Checked)
-                selectat = 0;
-            else if (radioButton2.Checked)
                 selectat = 1;
+            else if (radioButton2.Checked)
+                selectat = 0;
             else validare = false;
             reteta = (Farmacie.Medicament.Reteta)selectat;
             if (checkBox1.Checked == false && checkBox2.Checked == false && checkBox3.Checked == false && checkBox4.Checked == false && checkBox5.Checked == false)
@@ -132,7 +132,7 @@ namespace Farmacie
                 {
                     textfisier.WriteLine(medicamente[medicamente.Length - 1].nume + ';' + medicamente[medicamente.Length - 1].data_expirare + ';' + medicamente[medicamente.Length - 1].pret.ToString() + ';' + medicamente[medicamente.Length - 1].cantitate.ToString() + ';' + medicamente[medicamente.Length - 1].reteta.ToString() + ';' + medicamente[medicamente.Length - 1].varsta.ToString());
                 }
-
+                reset();
                 return medicament;
             }
             else
@@ -175,22 +175,6 @@ namespace Farmacie
                 label15.Text = "";
             }
         }
-        /*public void CautareMedicamentNume()
-        {
-            Console.WriteLine("Introduceti numele medicamentului cautat:");
-            string s = Console.ReadLine().Trim();
-            bool gasit = false;
-            foreach (var m in medicamente)
-            {
-                if (m.nume.ToUpper().Contains(s.ToUpper()))
-                {
-                    Console.WriteLine($"Medicamentul gasit:\n\tnume: {m.nume}\n\tdata expirare: {m.data_expirare}" +
-                        $"\n\tpret: {m.pret}\n\tcantitate: {m.cantitate}\n");
-                    gasit = true;
-                }
-            }
-            if (!gasit) Console.WriteLine($"Nu a fost gasit niciun medicament cu {s}\n");
-        }*/
 
         public Form1()
         {
@@ -221,13 +205,13 @@ namespace Farmacie
 
         private void button4_Click(object sender, EventArgs e)
         {
-            if (this.Width == 1300)
+            if (this.Width == 830)
             {
-                this.Width = 830;
+                this.Width = 1300;
             }
             else
             {
-                this.Width = 1300;
+                this.Width = 830;
             }
         }
 
@@ -248,7 +232,13 @@ namespace Farmacie
             {
                 comboBox2.Text = medicamente[medicamente.Length - 1].nume;
                 AfisareMedicament();
+                foreach (var item in comboBox2.Items)
+                {
+                    // Add the item to the destination ComboBox
+                    listBox1.Items.Add(item);
+                }
             }
+
         }
 
 
@@ -300,7 +290,40 @@ namespace Farmacie
                     comboBox2.Items.Remove(nume);
                     AfisareMedicament();
                     RewriteMedicamenteFile();
+                    changelistBox1();
                 }
+            }
+        }
+
+        private void changelistBox1()
+        {
+            string subsir = textBox4.Text;
+            while (listBox1.Items.Count > 0)
+            {
+                listBox1.Items.RemoveAt(0);
+            }
+
+
+            for (int i = 0; i < medicamente.Length; i++)
+            {
+                if (medicamente[i].nume.ToUpper().StartsWith(subsir.ToUpper()))
+                {
+                    listBox1.Items.Add(medicamente[i].nume);
+                }
+            }
+        }
+
+        private void textBox4_TextChanged(object sender, EventArgs e)
+        {
+            changelistBox1();
+        }
+
+        private void listBox1_SelectedValueChanged(object sender, EventArgs e)
+        {
+            if (listBox1.SelectedIndex != -1)
+            {
+                comboBox2.Text = listBox1.SelectedItem.ToString();
+                AfisareMedicament();
             }
         }
     }
