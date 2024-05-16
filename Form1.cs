@@ -62,7 +62,9 @@ namespace Farmacie
                         validare = false;
                     else if (Math.Round(pret, 2) != pret)
                         validare = false;
-                        int cantitate = 0;
+                    else if (pret<0)
+                        validare = false;
+                    int cantitate = 0;
                     if (!int.TryParse(parts[3], out cantitate))
                         validare = false;
                     Medicament.Reteta reteta = 0;
@@ -137,6 +139,12 @@ namespace Farmacie
                 validare = false;
                 validat[2] = false;
                 label26.Text = "Maxim 2 zecimale!";
+            }
+            else if (pret<0)
+            {
+                validare = false;
+                validat[2] = false;
+                label26.Text = "Introdu pozitiv!";
             }
             if (validat[2] == true)
                 label26.Text = "";
