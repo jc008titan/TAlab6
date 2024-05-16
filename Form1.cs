@@ -47,7 +47,9 @@ namespace Farmacie
                     double pret = 0;
                     if (!(double.TryParse(parts[2], out pret)))
                         validare = false;
-                    int cantitate = 0;
+                    else if (Math.Round(pret, 2) != pret)
+                        validare = false;
+                        int cantitate = 0;
                     if (!int.TryParse(parts[3], out cantitate))
                         validare = false;
                     Medicament.Reteta reteta = 0;
@@ -116,6 +118,12 @@ namespace Farmacie
                 validare = false;
                 validat[2] = false;
                 label26.Text = "Pret invalid!";
+            }
+            else if (Math.Round(pret,2)!=pret)
+            {
+                validare = false;
+                validat[2] = false;
+                label26.Text = "Maxim 2 zecimale!";
             }
             if (validat[2] == true)
                 label26.Text = "";
@@ -385,8 +393,10 @@ namespace Farmacie
 
         }
 
-
-
-        
+        private void textBox4_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == 13 && listBox1.Items.Count != 0)
+                listBox1.SelectedIndex = 0;
+        }
     }
 }
