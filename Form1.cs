@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Button;
 
+
 namespace Farmacie
 {
     public partial class Form1 : Form
@@ -33,12 +34,18 @@ namespace Farmacie
 
                     bool validare = true;
                     string nume = "";
+                    string data_expirare = "";
                     if (parts[0].Trim() != "")
                         nume = parts[0].Trim();
                     else validare = false;
-                    string data_expirare = parts[1];
+                    DateTime a;
+                    if (DateTime.TryParseExact(parts[1], "dd/MM/yyyy", null, System.Globalization.DateTimeStyles.None, out a))
+                    {
+                        data_expirare = parts[1];
+                    }
+                    else validare = false;
                     double pret = 0;
-                    if (!double.TryParse(parts[2], out pret))
+                    if (!(double.TryParse(parts[2], out pret)))
                         validare = false;
                     int cantitate = 0;
                     if (!int.TryParse(parts[3], out cantitate))
@@ -78,27 +85,72 @@ namespace Farmacie
         public Medicament CitireMedicament()
         {
             bool validare = true;
+            bool[] validat = { true, true, true, true, true, true };
             string nume = "";
             if (textBox1.Text.Trim() != "")
                 nume = textBox1.Text.Trim();
-            else validare = false;
-            string data_expirare = monthCalendar1.SelectionStart.ToString("dd/MM/yyyy");
+            else
+            {
+                validare = false;
+                validat[0] = false;
+                label24.Text = "Nume invalid!";
+            }
+            if (validat[0] == true)
+                label24.Text = "";
+            string data_expirare = "";
+            if (dateTimePicker1.Value.Date >= DateTime.Now.Date)
+            {
+                data_expirare = dateTimePicker1.Value.ToString("dd/MM/yyyy");
+            }
+            else
+            {
+                validare = false;
+                validat[1] = false;
+                label25.Text = "Data expirata!";
+            }
+            if (validat[1] == true)
+                label25.Text = "";
             double pret = 0;
             if (!double.TryParse(textBox2.Text, out pret))
+            {
                 validare = false;
+                validat[2] = false;
+                label26.Text = "Pret invalid!";
+            }
+            if (validat[2] == true)
+                label26.Text = "";
             int cantitate = 0;
             if (!int.TryParse(textBox3.Text, out cantitate))
+            {
                 validare = false;
+                validat[3] = false;
+                label27.Text = "Cantitate invalida!";
+            }
+            if (validat[3] == true)
+                label27.Text = "";
             Medicament.Reteta reteta = 0;
             int selectat = 1;
             if (radioButton1.Checked)
                 selectat = 1;
             else if (radioButton2.Checked)
                 selectat = 0;
-            else validare = false;
+            else
+            {
+                validare = false;
+                validat[4] = false;
+                label22.Text = "Selecteaza!";
+            }
+            if (validat[4] == true)
+                label22.Text = "";
             reteta = (Farmacie.Medicament.Reteta)selectat;
             if (checkBox1.Checked == false && checkBox2.Checked == false && checkBox3.Checked == false && checkBox4.Checked == false && checkBox5.Checked == false)
+            {
                 validare = false;
+                validat[5] = false;
+                label23.Text = "Selecteaza cel putin una!";
+            }
+            if (validat[5] == true)
+                label23.Text = "";
             string varste = "";
             if (checkBox1.Checked)
                 varste += " Copii0_3";
@@ -164,6 +216,7 @@ namespace Farmacie
                         break;
                     }
                 }
+
             }
             else
             {
@@ -200,21 +253,29 @@ namespace Farmacie
             if (CitireMedicament() != null)
                 comboBox2.Text = medicamente[medicamente.Length - 1].nume;
             AfisareMedicament();
+            changelistBox1();
             //this.Width=1300;
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
-            if (this.Width == 830)
+            if (comboBox2.SelectedItem != null)
             {
-                this.Width = 1300;
-            }
-            else
-            {
-                this.Width = 830;
+                string selectedMedicamentName = comboBox2.SelectedItem.ToString();
+
+                foreach (var medicament in medicamente)
+                {
+                    if (medicament.nume == selectedMedicamentName)
+                    {
+                        if (medicament.cantitate > 0)
+                            medicament.cantitate -= 1;
+                        label19.Text = medicament.cantitate.ToString();
+                        // Assuming there's only one medication with the selected name, so we break out of the loop
+                        break;
+                    }
+                }
             }
         }
-
         private void button2_Click(object sender, EventArgs e)
         {
             reset();
@@ -232,11 +293,7 @@ namespace Farmacie
             {
                 comboBox2.Text = medicamente[medicamente.Length - 1].nume;
                 AfisareMedicament();
-                foreach (var item in comboBox2.Items)
-                {
-                    // Add the item to the destination ComboBox
-                    listBox1.Items.Add(item);
-                }
+                changelistBox1();
             }
 
         }
@@ -325,6 +382,11 @@ namespace Farmacie
                 comboBox2.Text = listBox1.SelectedItem.ToString();
                 AfisareMedicament();
             }
+
         }
+
+
+
+        
     }
 }
