@@ -304,14 +304,14 @@ namespace Farmacie
                             AfisareMedicament();
                             RewriteMedicamenteFile();
                             label29.Text = profit.ToString();
+                            using (StreamWriter textfisier = new StreamWriter(fisier))
+                            {
+                                textfisier.WriteLine(profit);
+                            }
                         }
 
                         
                         break;
-                    }
-                    using (StreamWriter textfisier = new StreamWriter(fisier))
-                    {
-                        textfisier.WriteLine(profit);
                     }
                 }
             }
