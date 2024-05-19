@@ -24,7 +24,7 @@ namespace Farmacie
         public void CitireMedicamentFisier()
         {
             
-            string fisierprofit = "D:\\facultatea\\PIU\\TAlab6\\Profit.txt";
+            string fisierprofit = Environment.CurrentDirectory+"\\Profit.txt";
             if (!File.Exists(fisierprofit))
                 using (StreamWriter textfisier = new StreamWriter(fisierprofit))
                 {
@@ -35,7 +35,7 @@ namespace Farmacie
                 if (double.TryParse(textfisier.ReadToEnd(), out profit))
                     label29.Text = profit.ToString();
             }
-            string fisier = "D:\\facultatea\\PIU\\TAlab6\\Medicamente.txt";
+            string fisier = Environment.CurrentDirectory + "\\Medicamente.txt";
             if (!File.Exists(fisier))
                 return;
             using (StreamReader textfisier = new StreamReader(fisier))
@@ -208,7 +208,7 @@ namespace Farmacie
                 label20.Text = "Medicament adaugat";
                 label20.ForeColor = Color.Green;
 
-                string fisier = "D:\\facultatea\\PIU\\TAlab6\\Medicamente.txt";
+                string fisier = Environment.CurrentDirectory + "\\Medicamente.txt";
                 using (StreamWriter textfisier = new StreamWriter(fisier, true))
                 {
                     textfisier.WriteLine(medicamente[medicamente.Length - 1].nume + ';' + medicamente[medicamente.Length - 1].data_expirare + ';' + medicamente[medicamente.Length - 1].pret.ToString() + ';' + medicamente[medicamente.Length - 1].cantitate.ToString() + ';' + medicamente[medicamente.Length - 1].reteta.ToString() + ';' + medicamente[medicamente.Length - 1].varsta.ToString());
@@ -290,7 +290,7 @@ namespace Farmacie
         {
             if (comboBox2.SelectedItem != null)
             {
-                string fisier = "D:\\facultatea\\PIU\\TAlab6\\Profit.txt";
+                string fisier = Environment.CurrentDirectory + "\\Profit.txt";
                 string selectedMedicamentName = comboBox2.SelectedItem.ToString();
                 foreach (var medicament in medicamente)
                 {
@@ -344,7 +344,7 @@ namespace Farmacie
 
         private void RewriteMedicamenteFile()
         {
-            string fisier = "D:\\facultatea\\PIU\\TAlab6\\Medicamente.txt";
+            string fisier = Environment.CurrentDirectory + "\\Medicamente.txt";
             
             using (StreamWriter textfisier = new StreamWriter(fisier))
             {
